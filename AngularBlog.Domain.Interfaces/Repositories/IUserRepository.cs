@@ -2,7 +2,7 @@
 
 namespace AngularBlog.Domain.Interfaces.Repositories
 {
-    public interface IUserRepository : IBaseRepository<int, User>
+    public interface IUserRepository : IBaseRepository<User, int>
     {
         
     }

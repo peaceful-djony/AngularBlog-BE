@@ -8,5 +8,9 @@
       <ProjectReference Include="..\AngularBlog.Infrastructure.Data\AngularBlog.Infrastructure.Data.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="10.0.0" />
+    </ItemGroup>
+
 
 </Project>

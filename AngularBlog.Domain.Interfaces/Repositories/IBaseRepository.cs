@@ -2,7 +2,7 @@
 
 namespace AngularBlog.Domain.Interfaces.Repositories
 {
-    public interface IBaseRepository<in TKey, TEntity>
+    public interface IBaseRepository<TEntity, in TKey>
     {
         IEnumerable<TEntity> GetAll();
         TEntity Get(TKey id);
