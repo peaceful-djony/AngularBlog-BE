@@ -1,43 +1,47 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using AngularBlog.Domain.Interfaces.Repositories;
 using AngularBlog.Domain.Models;
+using AngularBlog.Infrastructure.Data.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace AngularBlog.Infrastructure.Data.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private static readonly User[] Users = {
-            new User{Id = 1, Email = "zep@ya.ru", Password = "pass"},
-            new User{Id = 2, Email = "zep@gmail.com", Password = "pass"},
-        };
-        
-        public IEnumerable<User> GetAll()
+        private readonly PostContext dbContext;
+
+        public UserRepository(PostContext dbContext)
         {
-            return Users;
+            this.dbContext = dbContext;
         }
 
-        public User Get(int id)
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
-            return Users.SingleOrDefault(u => u.Id == id);
+            return await dbContext.Users.ToArrayAsync();
         }
 
-        public bool Create(User entity)
+        public async Task<User> GetAsync(int id)
         {
-            throw new System.NotImplementedException();
+            return await dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public bool Update(User entity)
+        public Task<bool> CreateAsync(User entity)
         {
             throw new System.NotImplementedException();
         }
 
-        public bool Delete(int id)
+        public Task<bool> UpdateAsync(User entity)
         {
             throw new System.NotImplementedException();
         }
 
-        public bool Save()
+        public Task<bool> DeleteAsync(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<bool> SaveAsync()
         {
             throw new System.NotImplementedException();
         }

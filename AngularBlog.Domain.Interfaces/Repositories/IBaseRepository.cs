@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AngularBlog.Domain.Interfaces.Repositories
 {
     public interface IBaseRepository<TEntity, in TKey>
     {
-        IEnumerable<TEntity> GetAll();
-        TEntity Get(TKey id);
+        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<TEntity> GetAsync(TKey id);
 
-        bool Create(TEntity entity);
-        bool Update(TEntity entity);
-        bool Delete(TKey id);
-        bool Save();
+        Task<bool> CreateAsync(TEntity entity);
+        Task<bool> UpdateAsync(TEntity entity);
+        Task<bool> DeleteAsync(TKey id);
+        Task<bool> SaveAsync();
     }
 }

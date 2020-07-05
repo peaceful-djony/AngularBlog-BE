@@ -1,4 +1,5 @@
 using AngularBlog.API.Extensions;
+using AngularBlog.Infrastructure.Data.Contexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +25,8 @@ namespace AngularBlog.API
             services.AddRepositories();
             
             services.AddControllers();
+            
+            services.AddDbContext<PostContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

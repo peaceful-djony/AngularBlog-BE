@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using AngularBlog.API.ViewModels;
 using AngularBlog.Domain.Interfaces.Repositories;
 using AngularBlog.Infrastructure.Data.DTO;
@@ -30,9 +31,9 @@ namespace AngularBlog.API.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<AccountViewModel> Get()
+        public async Task<IEnumerable<AccountViewModel>> Get()
         {
-            var users = userRepository.GetAll();
+            var users = await userRepository.GetAllAsync();
             var userDtos = mapper.Map<IEnumerable<UserDto>>(users);
             var res = mapper.Map<IEnumerable<AccountViewModel>>(userDtos);
             return res;
@@ -40,9 +41,9 @@ namespace AngularBlog.API.Controllers
         
         [HttpGet]
         [Route("{id:int}")]
-        public AccountViewModel GetById(int id)
+        public async Task<AccountViewModel> GetById(int id)
         {
-            var user = userRepository.Get(id);
+            var user = await userRepository.GetAsync(id);
             var userDto = mapper.Map<UserDto>(user); 
             var res = mapper.Map<AccountViewModel>(userDto);
             return res;
