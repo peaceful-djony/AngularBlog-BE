@@ -10,6 +10,8 @@ namespace AngularBlog.API
 {
     public class Startup
     {
+        readonly string LocalhostAllowSpecificOrigins = "_localhostAllowSpecificOrigins";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -21,11 +23,23 @@ namespace AngularBlog.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMapper();
-            
+
             services.AddRepositories();
-            
+
+            //TODO https://docs.microsoft.com/ru-ru/aspnet/core/security/cors?view=aspnetcore-3.1
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: LocalhostAllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                    });
+            });
+
             services.AddControllers();
-            
+
             services.AddDbContext<PostContext>();
         }
 
@@ -37,9 +51,12 @@ namespace AngularBlog.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //TODO
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(LocalhostAllowSpecificOrigins);
 
             app.UseAuthorization();
 
