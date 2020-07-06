@@ -45,5 +45,10 @@ namespace AngularBlog.Infrastructure.Data.Repositories
         {
             throw new System.NotImplementedException();
         }
+
+        public async Task<User> GetFilteredAsync(string email)
+        {
+            return await dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
     }
 }
