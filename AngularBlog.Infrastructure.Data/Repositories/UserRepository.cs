@@ -9,9 +9,9 @@ namespace AngularBlog.Infrastructure.Data.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly PostContext dbContext;
+        private readonly PostDbContext dbContext;
 
-        public UserRepository(PostContext dbContext)
+        public UserRepository(PostDbContext dbContext)
         {
             this.dbContext = dbContext;
         }

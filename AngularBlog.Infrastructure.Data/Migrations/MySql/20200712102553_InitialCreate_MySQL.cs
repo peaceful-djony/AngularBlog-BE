@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace AngularBlog.Infrastructure.Data.Migrations
+namespace AngularBlog.Infrastructure.Data.Migrations.MySql
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialCreate_MySQL : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

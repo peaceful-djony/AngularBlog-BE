@@ -2,6 +2,7 @@ using AngularBlog.API.Extensions;
 using AngularBlog.Infrastructure.Data.Contexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,12 +13,14 @@ namespace AngularBlog.API
     {
         readonly string LocalhostAllowSpecificOrigins = "_localhostAllowSpecificOrigins";
 
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        private readonly IWebHostEnvironment env;
+        private readonly IConfiguration configuration;
 
-        public IConfiguration Configuration { get; }
+        public Startup(IWebHostEnvironment env, IConfiguration configuration)
+        {
+            this.env = env;
+            this.configuration = configuration;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -25,6 +28,8 @@ namespace AngularBlog.API
             services.AddMapper();
 
             services.AddRepositories();
+            
+            //TODO implement JWT 
 
             //TODO https://docs.microsoft.com/ru-ru/aspnet/core/security/cors?view=aspnetcore-3.1
             services.AddCors(options =>
@@ -40,12 +45,15 @@ namespace AngularBlog.API
 
             services.AddControllers();
 
-            services.AddDbContext<PostContext>();
+            services.AddPostContext(configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, PostDbContext dataContext)
         {
+            // migrate any database changes on startup (includes initial db creation)
+            dataContext.Database.Migrate();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
