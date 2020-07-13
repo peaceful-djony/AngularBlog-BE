@@ -1,0 +1,5 @@
+﻿{
+  "AppSettings": {
+    "SECRET": "Here_Should_Be_Secret_Key" 
+  }
+}
