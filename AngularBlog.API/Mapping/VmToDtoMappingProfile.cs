@@ -10,6 +10,9 @@ namespace AngularBlog.API.Mapping
         {
             CreateMap<UserDto, AccountViewModel>();
             CreateMap<AccountViewModel, UserDto>();
+            
+            CreateMap<AuthDto, AuthViewModel>();
+            CreateMap<AuthViewModel, AuthDto>();
         }
     }
 }

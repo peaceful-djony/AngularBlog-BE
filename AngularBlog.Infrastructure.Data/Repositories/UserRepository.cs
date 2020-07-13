@@ -50,5 +50,10 @@ namespace AngularBlog.Infrastructure.Data.Repositories
         {
             return await dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
+
+        public async Task<User> GetByCredentialsAsync(string email, string password)
+        {
+            return await dbContext.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+        }
     }
 }

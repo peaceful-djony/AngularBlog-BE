@@ -12,5 +12,7 @@
         public const string DbTypeKey = "DB_TYPE";
 
         public const string ConnectionStringTemplate = "ConnectionString:{0}";
+        
+        public const string AppSettingsKey = "AppSettings";
     }
 }

@@ -10,6 +10,9 @@ namespace AngularBlog.Infrastructure.Data.Mapping
         {
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();
+            
+            CreateMap<User, AuthDto>();
+            CreateMap<AuthDto, User>();
         }
     }
 }

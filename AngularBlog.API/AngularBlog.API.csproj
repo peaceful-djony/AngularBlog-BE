@@ -6,14 +6,16 @@
 
     <ItemGroup>
       <ProjectReference Include="..\AngularBlog.Common\AngularBlog.Common.csproj" />
-      <ProjectReference Include="..\AngularBlog.Infrastructure.Data\AngularBlog.Infrastructure.Data.csproj" />
+      <ProjectReference Include="..\AngularBlog.Services.Interfaces\AngularBlog.Services.Interfaces.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="10.0.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.5" />
       <PackageReference Include="Oracle.EntityFrameworkCore" Version="3.19.0-beta1" />
       <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
     </ItemGroup>
 
 

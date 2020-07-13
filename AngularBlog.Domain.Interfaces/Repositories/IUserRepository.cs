@@ -5,7 +5,7 @@ namespace AngularBlog.Domain.Interfaces.Repositories
 {
     public interface IUserRepository : IBaseRepository<User, int>
     {
-        //TODO use expression instead of fields
-        Task<User> GetFilteredAsync(string email);
+        Task<User> GetFilteredAsync(string email); //TODO use expression instead of fields
+        Task<User> GetByCredentialsAsync(string email, string password);
     }
 }
