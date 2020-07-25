@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using AngularBlog.API.Extensions;
 using AngularBlog.API.Services;
@@ -18,6 +21,8 @@ namespace AngularBlog.API
 {
     public class Startup
     {
+        private const string Version = "v1"; // TODO to config
+
         readonly string LocalhostAllowSpecificOrigins = "_localhostAllowSpecificOrigins";
 
         private readonly IWebHostEnvironment env;
@@ -64,13 +69,18 @@ namespace AngularBlog.API
             ConfigureJwt(services, appSettingsSection);
 
             services.AddPostContext(configuration);
-            
-            services.AddSwaggerGen(swagger =>
+
+            services.AddSwaggerGen(sw =>
             {
-                swagger.SwaggerDoc("v1", new OpenApiInfo
+                sw.SwaggerDoc(Version, new OpenApiInfo
                 {
-                    Title = "Angular Blog API"
+                    Title = "Angular Blog API",
+                    Version = Version
                 });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                sw.IncludeXmlComments(xmlPath);
             });
         }
 
@@ -84,12 +94,9 @@ namespace AngularBlog.API
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Angular Blog API");
-            });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint($"/swagger/{Version}/swagger.json", "Angular Blog API"); });
 
             //TODO
             //app.UseHttpsRedirection();
@@ -121,19 +128,22 @@ namespace AngularBlog.API
                 {
                     x.Events = new JwtBearerEvents
                     {
-                        OnTokenValidated = async context => await JwtValidated(context),
+                        OnTokenValidated = async context => await JwtValidated(context)
                     };
                     x.RequireHttpsMetadata = false;
                     x.SaveToken = true;
                     x.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey =  new SymmetricSecurityKey(key),
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
                         ValidateIssuer = false,
-                        ValidateAudience = false
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
                     };
                 });
         }
+
+        #region JWT
 
         private async Task JwtValidated(TokenValidatedContext context)
         {
@@ -151,5 +161,7 @@ namespace AngularBlog.API
                 context.Fail("Unauthorized");
             }
         }
+
+        #endregion
     }
 }
