@@ -82,14 +82,14 @@ namespace AngularBlog.API
 
                 sw.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Name = "Authorization",
+                    Name = "Bearer Authorization",
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
                     Description = "JWT Authorization header using the Bearer scheme."
                 });
-                
+
                 sw.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -104,6 +104,12 @@ namespace AngularBlog.API
                         new string[] {}
                     }
                 });
+                
+                #endregion
+                
+                #region Login/Pass Authorization
+                
+                // TODO add Login/Pass Authorization
                 
                 #endregion
 

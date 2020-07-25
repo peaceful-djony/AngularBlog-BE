@@ -12,8 +12,7 @@ namespace AngularBlog.API.Controllers
 {
     /// <summary>
     ///     AccountController is provide secure access to Users information
-    /// TODO https://docs.microsoft.com/en-us/aspnet/core/web-api/action-return-types?view=aspnetcore-3.1
-    /// IAction vs Type
+    /// TODO IAction vs Type: https://docs.microsoft.com/en-us/aspnet/core/web-api/action-return-types?view=aspnetcore-3.1
     /// </summary>
     [Authorize]
     [ApiController]

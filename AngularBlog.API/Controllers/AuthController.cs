@@ -56,7 +56,7 @@ namespace AngularBlog.API.Controllers
 
             var tokenStr = GetJwt(user);
 
-            return Ok(new AuthViewModel()
+            return Ok(new AuthViewModel
             {
                 Id = user.Id,
                 Token = tokenStr
@@ -71,7 +71,7 @@ namespace AngularBlog.API.Controllers
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.Id.ToString())
                 }),
                 Expires = expirationService.GetExpiration(),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
