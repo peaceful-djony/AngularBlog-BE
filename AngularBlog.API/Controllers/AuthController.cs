@@ -1,4 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
@@ -52,18 +53,24 @@ namespace AngularBlog.API.Controllers
 
             var user = await authService.LoginAsync(account.Email, account.Password);
             if (user == null)
-                return BadRequest(new {message = "Username or password is incorrect"});
+                // TODO to resources
+                return BadRequest(new
+                {
+                    message = "Username or password is incorrect",
+                    code = "INVALID_CREDENTIALS"
+                });
 
-            var tokenStr = GetJwt(user);
+            var expiresIn = expirationService.GetExpiration();
+            var tokenStr = GetJwt(user, expiresIn);
 
             return Ok(new AuthViewModel
             {
-                Id = user.Id,
-                Token = tokenStr
+                Token = tokenStr,
+                ExpiresIn = expiresIn.ToString()
             });
         }
 
-        private string GetJwt(AuthDto user)
+        private string GetJwt(AuthDto user, DateTime expiresIn)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = appSettings.GetSecretKey();
@@ -73,7 +80,7 @@ namespace AngularBlog.API.Controllers
                 {
                     new Claim(ClaimTypes.Name, user.Id.ToString())
                 }),
-                Expires = expirationService.GetExpiration(),
+                Expires = expiresIn,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature)
             };
