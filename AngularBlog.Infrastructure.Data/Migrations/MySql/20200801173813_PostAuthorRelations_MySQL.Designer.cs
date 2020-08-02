@@ -3,43 +3,42 @@ using System;
 using AngularBlog.Infrastructure.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Oracle.EntityFrameworkCore.Metadata;
 
-namespace AngularBlog.Infrastructure.Data.Migrations.Oracle
+namespace AngularBlog.Infrastructure.Data.Migrations.MySql
 {
-    [DbContext(typeof(OracleDbContext))]
-    partial class OracleDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(MySqlDbContext))]
+    [Migration("20200801173813_PostAuthorRelations_MySQL")]
+    partial class PostAuthorRelations_MySQL
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Oracle:ValueGenerationStrategy", OracleValueGenerationStrategy.IdentityColumn)
                 .HasAnnotation("ProductVersion", "3.1.5")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("AngularBlog.Domain.Models.Post", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("NUMBER(10)")
-                        .HasAnnotation("Oracle:ValueGenerationStrategy", OracleValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<int?>("AuthorId")
-                        .HasColumnType("NUMBER(10)");
+                        .HasColumnType("int");
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("NCLOB")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4")
                         .HasMaxLength(4096);
 
                     b.Property<DateTime>("DateTime")
-                        .HasColumnType("TIMESTAMP(7)");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR2(128)")
+                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
                         .HasMaxLength(128);
 
                     b.HasKey("Id");
@@ -53,31 +52,30 @@ namespace AngularBlog.Infrastructure.Data.Migrations.Oracle
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("NUMBER(10)")
-                        .HasAnnotation("Oracle:ValueGenerationStrategy", OracleValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR2(64)")
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
                         .HasMaxLength(64);
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("NVARCHAR2(64)")
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
                         .HasMaxLength(64)
                         .HasDefaultValue("");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("NVARCHAR2(64)")
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
                         .HasMaxLength(64)
                         .HasDefaultValue("");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR2(64)")
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
                         .HasMaxLength(64);
 
                     b.HasKey("Id");

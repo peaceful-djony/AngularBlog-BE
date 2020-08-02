@@ -7,7 +7,7 @@ namespace AngularBlog.Infrastructure.Data.DTO
         public int Id { get; set; }
         public string Title { get; set; }
         public DateTime DateTime { get; set; } // TODO NodaTime instead of DateTime
-        public string Author { get; set; }
+        public AuthorDto Author { get; set; }
         public string Content { get; set; }
     }
 }

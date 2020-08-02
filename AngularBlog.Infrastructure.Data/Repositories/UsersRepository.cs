@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AngularBlog.Infrastructure.Data.Repositories
 {
-    public class UsersRepository : BaseRepository<int, User>, IUserRepository
+    public class UsersRepository : BaseRepository<int, User>, IUsersRepository
     {
         public UsersRepository(PostDbContext dbContext) : base(dbContext)
         {}

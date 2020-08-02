@@ -23,10 +23,8 @@ namespace AngularBlog.Infrastructure.Data.Migrations.MySql
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Author")
-                        .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
-                        .HasMaxLength(64);
+                    b.Property<int?>("AuthorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -43,6 +41,8 @@ namespace AngularBlog.Infrastructure.Data.Migrations.MySql
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AuthorId");
+
                     b.ToTable("Posts");
                 });
 
@@ -56,6 +56,20 @@ namespace AngularBlog.Infrastructure.Data.Migrations.MySql
                         .IsRequired()
                         .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
                         .HasMaxLength(64);
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasMaxLength(64)
+                        .HasDefaultValue("");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasMaxLength(64)
+                        .HasDefaultValue("");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -82,6 +96,13 @@ namespace AngularBlog.Infrastructure.Data.Migrations.MySql
                             Email = "blogger@winzep.com",
                             Password = "blogger"
                         });
+                });
+
+            modelBuilder.Entity("AngularBlog.Domain.Models.Post", b =>
+                {
+                    b.HasOne("AngularBlog.Domain.Models.User", "Author")
+                        .WithMany("Posts")
+                        .HasForeignKey("AuthorId");
                 });
 #pragma warning restore 612, 618
         }
