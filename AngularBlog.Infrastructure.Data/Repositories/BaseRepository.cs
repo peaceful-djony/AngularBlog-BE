@@ -11,25 +11,25 @@ namespace AngularBlog.Infrastructure.Data.Repositories
     public abstract class BaseRepository<TKey, TEntity> : IBaseRepository<TKey, TEntity> where TEntity : IdEntity<TKey>
     {
         protected readonly PostDbContext DbContext;
-        private readonly DbSet<TEntity> entitiesSet;
+        protected readonly DbSet<TEntity> EntitiesSet;
 
         protected BaseRepository(PostDbContext dbContext)
         {
             DbContext = dbContext;
-            entitiesSet = DbContext.Set<TEntity>();
+            EntitiesSet = DbContext.Set<TEntity>();
         }
 
         #region IBaseRepository
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return await entitiesSet.ToArrayAsync();
+            return await EntitiesSet.ToArrayAsync();
         }
 
-        public async Task<TEntity> GetAsync(TKey id)
+        public virtual async Task<TEntity> GetAsync(TKey id)
         {
             // not SingleOrDefaultAsync by performance reasons
-            return await entitiesSet.FirstOrDefaultAsync(u => u.Id.Equals(id));
+            return await EntitiesSet.FirstOrDefaultAsync(e => e.Id.Equals(id));
         }
 
         public async Task<bool> CreateAsync(TEntity entity)
@@ -37,7 +37,7 @@ namespace AngularBlog.Infrastructure.Data.Repositories
             var res = false;
             try
             {
-                await entitiesSet.AddAsync(entity);
+                await EntitiesSet.AddAsync(entity);
                 var savedCnt = await DbContext.SaveChangesAsync();
                 res = savedCnt == 1;
                 if (!res)
@@ -60,7 +60,7 @@ namespace AngularBlog.Infrastructure.Data.Repositories
             var res = false;
             try
             {
-                entitiesSet.Update(entity);
+                EntitiesSet.Update(entity);
                 var updatedCnt = await DbContext.SaveChangesAsync();
                 res = updatedCnt == 1;
                 if (!res)

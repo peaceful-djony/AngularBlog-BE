@@ -6,7 +6,7 @@ namespace AngularBlog.Domain.Models
     {
         public string Title { get; set; }
         public DateTime DateTime { get; set; } // TODO NodaTime instead of DateTime
-        public string Author { get; set; }     // TODO not just string
+        public User Author { get; set; }
         public string Content { get; set; }
     }
 }

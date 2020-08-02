@@ -17,10 +17,23 @@ namespace AngularBlog.Infrastructure.Data.ModelConfigurations
             entity.Property(u => u.Email)
                 .HasMaxLength(64)
                 .IsRequired();
+            
+            entity.Property(u => u.FirstName)
+                .HasMaxLength(64)
+                .HasDefaultValue("")
+                .IsRequired();
+            
+            entity.Property(u => u.LastName)
+                .HasMaxLength(64)
+                .HasDefaultValue("")
+                .IsRequired();
 
             entity.Property(u => u.Password)
                 .HasMaxLength(64)
                 .IsRequired();
+
+            entity.HasMany(u => u.Posts)
+                .WithOne(p => p.Author);
 
             entity.HasData(
                 new User {Id = 1, Email = "admin@winzep.com", Password = "admin"},

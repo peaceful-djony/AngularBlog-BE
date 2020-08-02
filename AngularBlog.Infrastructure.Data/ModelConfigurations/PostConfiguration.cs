@@ -16,13 +16,12 @@ namespace AngularBlog.Infrastructure.Data.ModelConfigurations
                 .HasMaxLength(128)
                 .IsRequired();
             
-            entity.Property(p => p.Author)
-                .HasMaxLength(64)
-                .IsRequired();
-            
             entity.Property(p => p.Content)
                 .HasMaxLength(4 * 1024)
                 .IsRequired();
+            
+            entity.HasOne(p => p.Author)
+                .WithMany(u => u.Posts);
             
             entity.Property(p => p.DateTime)
                 .IsRequired();
