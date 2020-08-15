@@ -16,7 +16,8 @@ namespace AngularBlog.API.Extensions
     {
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IUserRepository, UsersRepository>();
+            services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddScoped<IPostsRepository, PostsRepository>();
 
             return services;
         }

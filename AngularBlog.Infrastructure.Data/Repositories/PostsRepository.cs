@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using AngularBlog.Domain.Interfaces.Repositories;
 using AngularBlog.Domain.Models;
 using AngularBlog.Infrastructure.Data.Contexts;
@@ -12,10 +13,16 @@ namespace AngularBlog.Infrastructure.Data.Repositories
         {
         }
 
+        public override async Task<IEnumerable<Post>> GetAllAsync()
+        {
+            return await EntitiesSet.Include(p => p.Author)
+                .ToListAsync();
+        }
+        
         public override async Task<Post> GetAsync(int id)
         {
-            var res = await EntitiesSet.Include(u => u.Author).FirstOrDefaultAsync(u => u.Id.Equals(id));
-            return res;
+            return await EntitiesSet.Include(p => p.Author)
+                .FirstOrDefaultAsync(u => u.Id.Equals(id));
         }
     }
 }

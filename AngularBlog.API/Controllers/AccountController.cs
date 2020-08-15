@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AngularBlog.API.ViewModels;
-using AngularBlog.Domain.Interfaces.Repositories;
-using AngularBlog.Infrastructure.Data.DTO;
+using AngularBlog.Services.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace AngularBlog.API.Controllers
 {
     /// <summary>
-    ///     AccountController is provide secure access to Users information
+    ///     AccountController provide secure access to Users information
     /// TODO IAction vs Type: https://docs.microsoft.com/en-us/aspnet/core/web-api/action-return-types?view=aspnetcore-3.1
     /// </summary>
     [Authorize]
@@ -21,19 +20,21 @@ namespace AngularBlog.API.Controllers
     {
         private readonly ILogger<AccountController> logger;
         private readonly IMapper mapper;
-        
-        // TODO don't use repository from Controller directly
-        private readonly IUserRepository userRepository;
+
+        private readonly IUsersService usersService;
+        private readonly IScopeInfoService scopeInfo;
 
         public AccountController(
             ILogger<AccountController> logger,
             IMapper mapper,
-            IUserRepository userRepository
-            )
+            IUsersService usersService,
+            IScopeInfoService scopeInfo
+        )
         {
             this.logger = logger;
             this.mapper = mapper;
-            this.userRepository = userRepository;
+            this.usersService = usersService;
+            this.scopeInfo = scopeInfo;
         }
 
         /// <summary>
@@ -43,10 +44,8 @@ namespace AngularBlog.API.Controllers
         [HttpGet]
         public async Task<IEnumerable<AccountViewModel>> GetAsync()
         {
-            var users = await userRepository.GetAllAsync();
-            var userDtos = mapper.Map<IEnumerable<UserDto>>(users);
-            var res = mapper.Map<IEnumerable<AccountViewModel>>(userDtos);
-            return res;
+            var users = await usersService.GetAllAsync();
+            return mapper.Map<IEnumerable<AccountViewModel>>(users);
         }
         
         /// <summary>
@@ -58,10 +57,20 @@ namespace AngularBlog.API.Controllers
         [Route("{id:int}")]
         public async Task<AccountViewModel> GetById(int id)
         {
-            var user = await userRepository.GetAsync(id);
-            var userDto = mapper.Map<UserDto>(user); 
-            var res = mapper.Map<AccountViewModel>(userDto);
-            return res;
+            var user = await usersService.GetByIdAsync(id);
+            return mapper.Map<AccountViewModel>(user);
+        }
+        
+        /// <summary>
+        ///     Returns particular Author from token
+        /// </summary>
+        /// <returns>author from token</returns>
+        [HttpGet]
+        [Route("author")]
+        public async Task<AuthorViewModel> GetAuthor()
+        {
+            var author = await usersService.GetAuthorByIdAsync(scopeInfo.UserId);
+            return mapper.Map<AuthorViewModel>(author);
         }
     }
 }

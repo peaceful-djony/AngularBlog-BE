@@ -11,6 +11,7 @@ namespace AngularBlog.Infrastructure.Data.ModelConfigurations
             entity.ToTable("Users");
 
             entity.HasKey(u => u.Id);
+
             entity.HasIndex(u => u.Email)
                 .IsUnique();
 
