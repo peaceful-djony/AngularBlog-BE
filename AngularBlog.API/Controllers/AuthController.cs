@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
@@ -18,7 +19,7 @@ namespace AngularBlog.API.Controllers
     /// <summary>
     ///     AuthController responsibility is authorisation
     /// </summary>
-    [AllowAnonymous]
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class AuthController : ControllerBase
@@ -28,6 +29,13 @@ namespace AngularBlog.API.Controllers
         private readonly IOptions<AppSettings> appSettings;
         private readonly ILogger<AuthController> logger;
 
+        /// <summary>
+        ///     Constructor for AuthController
+        /// </summary>
+        /// <param name="logger">Instance of type <see cref="ILogger"/> to log activity</param>
+        /// <param name="authService">Authentication Service of type <see cref="IAuthService"/></param>
+        /// <param name="expirationService">Expiration Service of type <see cref="IExpirationService"/></param>
+        /// <param name="appSettings">String typed settings for application</param>
         public AuthController(
             ILogger<AuthController> logger,
             IAuthService authService,
@@ -46,6 +54,7 @@ namespace AngularBlog.API.Controllers
         /// </summary>
         /// <param name="account">VM represent data to login</param>
         /// <returns>AuthViewModel</returns>
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login(AccountViewModel account)
         {
@@ -66,7 +75,7 @@ namespace AngularBlog.API.Controllers
             return Ok(new AuthViewModel
             {
                 Token = tokenStr,
-                ExpiresIn = expiresIn.ToString()
+                ExpiresIn = expiresIn.ToString(CultureInfo.InvariantCulture)
             });
         }
 

@@ -7,22 +7,21 @@ using Microsoft.Extensions.Logging;
 
 namespace AngularBlog.API.Services
 {
-    // TODO summary
-    // TODO move to specific project
+    // TODO move to Identity Server 4
     public class AuthService : IAuthService
     {
         private readonly ILogger<AuthService> logger;
-        private readonly IUserRepository userRepository;
+        private readonly IUsersRepository usersRepository;
         private readonly IMapper mapper;
 
         public AuthService(
             ILogger<AuthService> logger,
-            IUserRepository userRepository,
+            IUsersRepository usersRepository,
             IMapper mapper
         )
         {
             this.logger = logger;
-            this.userRepository = userRepository;
+            this.usersRepository = usersRepository;
             this.mapper = mapper;
         }
 
@@ -31,13 +30,15 @@ namespace AngularBlog.API.Services
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 logger.LogWarning($"Empty {username} or {password}");
+                // TODO Null Object
                 return null;
             }
 
-            var user = await userRepository.GetByCredentialsAsync(username, password);
+            var user = await usersRepository.GetByCredentialsAsync(username, password);
             if (user == null)
             {
                 logger.LogTrace($"User {username} with {password} was not found");
+                // TODO Null Object
                 return null;
             }
             

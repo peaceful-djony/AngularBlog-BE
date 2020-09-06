@@ -8,11 +8,21 @@ namespace AngularBlog.API.Mapping
     {
         public VmToDtoMappingProfile()
         {
+            #region Users
+            
             CreateMap<UserDto, AccountViewModel>();
             CreateMap<AccountViewModel, UserDto>();
             
             CreateMap<AuthDto, AuthViewModel>();
             CreateMap<AuthViewModel, AuthDto>();
+
+            CreateMap<AuthorDto, AuthorViewModel>();
+            CreateMap<AuthorViewModel, AuthorDto>();
+
+            #endregion
+
+            CreateMap<PostViewModel, PostDto>();
+            CreateMap<PostDto, PostViewModel>();
         }
     }
 }

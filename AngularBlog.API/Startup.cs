@@ -45,8 +45,10 @@ namespace AngularBlog.API
             services.AddRepositories();
 
             services.AddSingleton<IExpirationService, ExpirationService>();
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>()
+                .AddScoped<IUsersService, UsersService>()
+                .AddScoped<IPostService, PostService>()
+                .AddScoped<IScopeInfoService, ScopeInfoService>();
 
             //TODO https://docs.microsoft.com/ru-ru/aspnet/core/security/cors?view=aspnetcore-3.1
             services.AddCors(options =>
@@ -60,7 +62,10 @@ namespace AngularBlog.API
                     });
             });
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
 
             // configure strongly typed app settings object
             var appSettingsSection = configuration.GetSection(Constants.AppSettingsKey);
@@ -182,7 +187,8 @@ namespace AngularBlog.API
 
         private async Task JwtValidated(TokenValidatedContext context)
         {
-            var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+            var userService = context.HttpContext.RequestServices.GetRequiredService<IUsersService>();
+            var scopeInfoService = context.HttpContext.RequestServices.GetRequiredService<IScopeInfoService>();
             var userIdStr = context.Principal.Identity.Name;
             if (!int.TryParse(userIdStr, out var userId))
             {
@@ -194,7 +200,11 @@ namespace AngularBlog.API
             if (user == null)
             {
                 context.Fail("Unauthorized");
+                return;
             }
+
+            // TODO middleware
+            scopeInfoService.UserId = userId;
         }
 
         #endregion
